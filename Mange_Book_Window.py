@@ -1,92 +1,94 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 
+# ===== UI COLORS (from upgraded version) =====
+red = "#C00000"
+dark_red = "#8B0000"
+green = "#25D366"
+dark_green = "#128C7E"
+light_grey = "#D3D3D3"
+white = "#252525"
+black = "#E5E5E5"
+yellow = "#ffe400"
+
 
 class ManageBooks:
     def __init__(self, master, show_home):
         self.master = master
         self.show_home = show_home
-        self.frame = Frame(master)
+        self.frame = Frame(master, bg=black)
         self.create_ui()
 
     def create_ui(self):
 
         # ================= HEADER =================
-        header_frame = Frame(self.frame)
+        header_frame = Frame(self.frame, bg=black)
         header_frame.pack(fill=X, pady=10)
 
         Label(
-            header_frame, text="Books Management", font=("Arial", 20, "bold"), pady=10
+            header_frame,
+            text="Books Management",
+            font=("Arial", 20, "bold"),
+            pady=10,
+            bg=black,
+            fg=white,
         ).pack()
 
         Button(
             header_frame,
             text="Back to Home",
             command=self.show_home,
-            bg="gray",
-            fg="white",
+            bg=dark_green,
+            fg=black,
             cursor="hand2",
             relief=FLAT,
         ).pack(pady=5)
 
         # ================= MAIN BODY =================
-        main_frame = Frame(self.frame)
+        main_frame = Frame(self.frame, bg=black)
         main_frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
 
         # ---------- LEFT SIDE (FORM) ----------
-        form_frame = Frame(main_frame)
-        form_frame.grid(row=0, column=0, sticky="n")
+        form_frame = Frame(main_frame, bg=black)
+        form_frame.grid(row=0, column=0, sticky="n", padx=20)
 
-        Label(form_frame, text="Title").grid(
+        Label(form_frame, text="Title", bg=black, fg=white).grid(
             row=0, column=0, padx=5, pady=5, sticky="w"
         )
         self.title_entry = Entry(form_frame, width=25)
         self.title_entry.grid(row=0, column=1, padx=5, pady=5)
 
-        Label(form_frame, text="Author").grid(
+        Label(form_frame, text="Author", bg=black, fg=white).grid(
             row=1, column=0, padx=5, pady=5, sticky="w"
         )
         self.author_entry = Entry(form_frame, width=25)
         self.author_entry.grid(row=1, column=1, padx=5, pady=5)
 
-        Label(form_frame, text="Price").grid(
+        Label(form_frame, text="Price", bg=black, fg=white).grid(
             row=2, column=0, padx=5, pady=5, sticky="w"
         )
         self.price_entry = Entry(form_frame, width=25)
         self.price_entry.grid(row=2, column=1, padx=5, pady=5)
 
-        Label(form_frame, text="Quantity").grid(
+        Label(form_frame, text="Quantity", bg=black, fg=white).grid(
             row=3, column=0, padx=5, pady=5, sticky="w"
         )
         self.quantity_entry = Entry(form_frame, width=25)
         self.quantity_entry.grid(row=3, column=1, padx=5, pady=5)
 
         # ---------- BUTTONS ----------
-        btn_frame = Frame(form_frame)
+        btn_frame = Frame(form_frame, bg=black)
         btn_frame.grid(row=4, column=0, columnspan=2, pady=10)
 
-        Button(
-            btn_frame,
-            text="Add Book",
-            command=self.add_book,
-            bg="gray",
-            width=12,
-            cursor="hand2",
-            relief=FLAT,
-        ).grid(row=0, column=0, padx=5)
-
-        Button(
-            btn_frame,
-            text="Update Book",
-            command=self.update_book,
-            bg="gray",
-            width=12,
-            cursor="hand2",
-            relief=FLAT,
-        ).grid(row=0, column=1, padx=5)
+        Button(btn_frame, text="Add Book", bg=dark_green, fg=black, width=12).grid(
+            row=0, column=0, padx=5
+        )
+        Button(btn_frame, text="Update Book", bg=dark_green, fg=black, width=12).grid(
+            row=0, column=1, padx=5
+        )
 
         # ================= RIGHT SIDE (TABLE) =================
-        table_frame = Frame(main_frame)
+        table_frame = Frame(main_frame, bg=black)
         table_frame.grid(row=0, column=1, padx=20)
 
         scrollbar = Scrollbar(table_frame, orient=VERTICAL)
@@ -110,24 +112,25 @@ class ManageBooks:
 
         self.tree.pack(fill=BOTH, expand=True)
 
+        # 🔥 UI enhancement from your diff
         self.tree.bind("<ButtonRelease-1>", self.on_item_click)
 
         # ================= SEARCH SECTION =================
-        search_container = Frame(self.frame)
+        search_container = Frame(self.frame, bg=black)
         search_container.pack(pady=10, fill=X)
 
-        search_inner = Frame(search_container)
+        search_inner = Frame(search_container, bg=black)
         search_inner.pack()
 
-        Label(search_inner, text="Search:", font=("Arial", 10)).grid(row=0, column=0)
+        Label(search_inner, text="Search:", bg=black, fg=white).grid(row=0, column=0)
 
         self.search_entry = Entry(search_inner, width=30)
         self.search_entry.grid(row=0, column=1, padx=5)
 
-        Button(search_inner, text="Search", bg="gray", width=10).grid(
+        Button(search_inner, text="Search", bg=dark_green, fg=black, width=10).grid(
             row=0, column=2, padx=5
         )
-        Button(search_inner, text="Clear", bg="gray", width=10).grid(
+        Button(search_inner, text="Clear", bg=dark_red, fg=black, width=10).grid(
             row=0, column=3, padx=5
         )
 
@@ -144,7 +147,6 @@ class ManageBooks:
         selected_item = self.tree.selection()
         if selected_item:
             self.reset_form()
-
             item_data = self.tree.item(selected_item)
 
             self.title_entry.insert(0, item_data["values"][1])
@@ -163,24 +165,6 @@ class ManageBooks:
 
         for row in sample_books:
             self.tree.insert("", END, values=row)
-
-    # ================= ACTIONS =================
-    def add_book(self):
-        if self.title_entry.get():
-            messagebox.showinfo("Success", "Book added successfully")
-            self.load_books()
-            self.reset_form()
-        else:
-            messagebox.showerror("Error", "All fields are required")
-
-    def update_book(self):
-        selected = self.tree.selection()
-        if selected:
-            messagebox.showinfo("Success", "Book updated successfully")
-            self.load_books()
-            self.reset_form()
-        else:
-            messagebox.showerror("Error", "Select a book to update")
 
     # ================= VIEW CONTROL =================
     def display(self):
