@@ -10,91 +10,130 @@ class ManageBooks:
         self.create_ui()
 
     def create_ui(self):
-        lab1 = Label(self.frame, text="Books Management", font=("Arial", 16))
-        lab1.pack(pady=10)
 
+        # ================= HEADER =================
+        header_frame = Frame(self.frame)
+        header_frame.pack(fill=X, pady=10)
+
+        Label(header_frame, text="Books Management", font=("Arial", 18, "bold")).pack()
+
+        # ================= HOME BUTTON =================
         btn_home = Button(
-            self.frame, text="Back to Home", command=self.show_home, bg="gray"
+            header_frame,
+            text="Back to Home",
+            command=self.show_home,
+            bg="gray",
+            fg="white",
         )
-        btn_home.pack(pady=10)
+        btn_home.pack(pady=5)
 
-        form_frame = Frame(self.frame)
-        form_frame.pack(pady=10)
+        # ================= MAIN BODY =================
+        main_frame = Frame(self.frame)
+        main_frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
 
-        Label(form_frame, text="Title").grid(row=0, column=0, padx=5, pady=5)
+        # ---------- LEFT SIDE (FORM) ----------
+        form_frame = Frame(main_frame)
+        form_frame.grid(row=0, column=0, sticky="n")
+
+        Label(form_frame, text="Title").grid(
+            row=0, column=0, padx=5, pady=5, sticky="w"
+        )
         self.title_entry = Entry(form_frame)
         self.title_entry.grid(row=0, column=1, padx=5, pady=5)
 
-        Label(form_frame, text="Author").grid(row=1, column=0, padx=5, pady=5)
+        Label(form_frame, text="Author").grid(
+            row=1, column=0, padx=5, pady=5, sticky="w"
+        )
         self.author_entry = Entry(form_frame)
         self.author_entry.grid(row=1, column=1, padx=5, pady=5)
 
-        Label(form_frame, text="Price").grid(row=2, column=0, padx=5, pady=5)
+        Label(form_frame, text="Price").grid(
+            row=2, column=0, padx=5, pady=5, sticky="w"
+        )
         self.price_entry = Entry(form_frame)
         self.price_entry.grid(row=2, column=1, padx=5, pady=5)
 
-        Label(form_frame, text="Quantity").grid(row=3, column=0, padx=5, pady=5)
+        Label(form_frame, text="Quantity").grid(
+            row=3, column=0, padx=5, pady=5, sticky="w"
+        )
         self.quantity_entry = Entry(form_frame)
         self.quantity_entry.grid(row=3, column=1, padx=5, pady=5)
 
-        Button(form_frame, text="Add Book", command=self.add_book, bg="gray").grid(
-            row=4, column=0, pady=10
-        )
+        # ---------- BUTTONS ----------
+        btn_frame = Frame(form_frame)
+        btn_frame.grid(row=4, column=0, columnspan=2, pady=10)
+
         Button(
-            form_frame, text="Update Book", command=self.update_book, bg="gray"
-        ).grid(row=4, column=1, pady=10)
+            btn_frame, text="Add Book", command=self.add_book, bg="gray", width=12
+        ).grid(row=0, column=0, padx=5)
+
+        Button(
+            btn_frame, text="Update Book", command=self.update_book, bg="gray", width=12
+        ).grid(row=0, column=1, padx=5)
+
+        # ================= RIGHT SIDE (TABLE) =================
+        table_frame = Frame(main_frame)
+        table_frame.grid(row=0, column=1, padx=20)
 
         self.tree = ttk.Treeview(
-            self.frame,
+            table_frame,
             columns=("id", "title", "author", "price", "quantity"),
             show="headings",
+            height=12,
         )
+
         self.tree.heading("id", text="ID")
         self.tree.heading("title", text="Title")
         self.tree.heading("author", text="Author")
         self.tree.heading("price", text="Price")
         self.tree.heading("quantity", text="Quantity")
-        self.tree.pack(pady=10)
+
+        self.tree.pack()
+
+        # ================= SEARCH SECTION =================
+        search_frame = Frame(self.frame)
+        search_frame.pack(pady=10)
+
+        Label(search_frame, text="Search:").grid(row=0, column=0)
+
+        self.search_entry = Entry(search_frame, width=30)
+        self.search_entry.grid(row=0, column=1, padx=5)
+
+        Button(search_frame, text="Search", bg="gray").grid(row=0, column=2, padx=5)
+        Button(search_frame, text="Clear", bg="gray").grid(row=0, column=3, padx=5)
+
+        # Load sample data
         self.load_books()
 
+    # ================= DATA =================
     def load_books(self):
+        self.tree.delete(*self.tree.get_children())
+
         sample_books = [
             (1, "Book A", "Author A", 15.5, 10),
             (2, "Book B", "Author B", 20.0, 5),
         ]
+
         for row in sample_books:
             self.tree.insert("", END, values=row)
 
+    # ================= ACTIONS =================
     def add_book(self):
-        title = self.title_entry.get()
-        author = self.author_entry.get()
-        price = self.price_entry.get()
-        quantity = self.quantity_entry.get()
-
-        if title and author and price and quantity:
+        if self.title_entry.get():
             messagebox.showinfo("Success", "Book added successfully")
             self.load_books()
         else:
             messagebox.showerror("Error", "All fields are required")
 
     def update_book(self):
-        selected_item = self.tree.selection()
-        if selected_item:
-            item = self.tree.item(selected_item)
-            book_id = item["values"][0]
-            title = self.title_entry.get()
-            author = self.author_entry.get()
-            price = self.price_entry.get()
-            quantity = self.quantity_entry.get()
-
-            if title and author and price and quantity:
-                messagebox.showinfo("Success", "Book updated successfully")
-                self.load_books()
-            else:
-                messagebox.showerror("Error", "All fields are required")
+        selected = self.tree.selection()
+        if selected:
+            messagebox.showinfo("Success", "Book updated successfully")
+            self.load_books()
         else:
             messagebox.showerror("Error", "Select a book to update")
 
+    # ================= VIEW CONTROL =================
     def display(self):
         self.frame.pack(fill=BOTH, expand=True)
 
@@ -105,8 +144,7 @@ class ManageBooks:
 if __name__ == "__main__":
     root = Tk()
     root.title("Bookstore Management System")
-    root.geometry("600x400")
-    manage_books = ManageBooks(root, lambda: print("Back to Home"))
-    manage_books.display()
+    root.geometry("750x450")
+    app = ManageBooks(root, lambda: print("Back Home"))
+    app.display()
     root.mainloop()
-    
