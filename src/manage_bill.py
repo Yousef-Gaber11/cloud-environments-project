@@ -1,7 +1,7 @@
 from functools import reduce
-from .book import Book
+from book import Book
 from database_utility import SQLite
-from .manage_books import ManageBook
+from manage_books import ManageBook
 
 
 class ManageBill:

@@ -1,11 +1,11 @@
 from tkinter import *
-from src.book import Book
-from src.manage_books import *
+from book import Book
+from manage_books import *
 from Validation import Validation
 from tkinter import ttk, messagebox
 
 # from databasesFile import main_database_conection
-from src.classesFile import manage_book_conection
+from classesFile import manage_book_conection
 
 red = "#C00000"
 dark_red = "#8B0000"
