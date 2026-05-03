@@ -1,4 +1,4 @@
-from book import Book
+from .book import Book
 from database_utility import SQLite
 
 
