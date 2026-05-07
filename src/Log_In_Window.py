@@ -9,11 +9,6 @@ class LoginPage:
         self.root.geometry("800x600")
         self.root.title("Login Page")
         self.validation = Validation()
-        try:
-            icon = PhotoImage(file="Source/Icon.png")
-            self.root.iconphoto(True, icon)
-        except TclError:
-            print("Icon file not found. Continuing without icon.")
         self.frame = Frame(root, bd=2, relief="groove")
         self.frame.pack(padx=20, pady=100)
         self.frame.grid_rowconfigure(0, weight=3)
@@ -77,6 +72,4 @@ class LoginPage:
 if __name__ == "__main__":
     root = Tk()
     login_page = LoginPage(root)
-    root.state("zoomed")
-    # root.resizable(False, False)
     root.mainloop()

@@ -4,7 +4,6 @@ from manage_books import *
 from Validation import Validation
 from tkinter import ttk, messagebox
 
-# from databasesFile import main_database_conection
 from classesFile import manage_book_conection
 
 red = "#C00000"
@@ -20,8 +19,6 @@ yellow = "#ffe400"
 
 class ManageBooks:
     def __init__(self, master, show_home):
-        # self.dbobj = SQLite("bookstore.db")
-        # self.manage_books = ManageBook(SQLite("Source/bookstore.db"))
         self.manage_books = manage_book_conection
         self.valid = Validation()
         self.books = []
@@ -35,7 +32,6 @@ class ManageBooks:
         books_data = Frame(self.frame, bg=color_frame)
         books_data.grid(row=0, column=0, rowspan=2, padx=50, sticky="nesw")
 
-        # Title 1
         title_frame = Frame(books_data, bg=color_frame)
         title_frame.grid(row=0, column=0, sticky="nesw", pady=20, padx=20)
 
@@ -313,8 +309,7 @@ class ManageBooks:
         self.quantity_entry.delete(0, END)
 
     def on_item_click(self, event):
-
-        selected_item = self.tree.selection()  # Get the focused item
+        selected_item = self.tree.selection()
         if selected_item:
             self.reset_form()
             item_data = self.tree.item(selected_item)
@@ -324,8 +319,8 @@ class ManageBooks:
             self.price_entry.insert(0, item_data["values"][3])
             self.quantity_entry.insert(0, item_data["values"][4])
 
-            print("Item Data:", item_data)  # Print the data
-            print("Values:", item_data["values"])  # Print the values (columns)
+            print("Item Data:", item_data)
+            print("Values:", item_data["values"]) 
 
     def display(self):
         self.frame.pack(fill=BOTH, expand=True)
